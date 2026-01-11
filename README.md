@@ -2,6 +2,13 @@
 
 Manage multiple Claude Code profiles with a simple `-u` flag.
 
+## Requirements
+
+- Linux or macOS
+- Bash or Zsh
+- `zip`/`unzip` (for export/import)
+- `jq` (optional, for profile info)
+
 ## Install
 
 ```bash
