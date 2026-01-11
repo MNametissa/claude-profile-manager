@@ -44,7 +44,8 @@ claude() {
     fi
 
     if [[ $skip_permissions -eq 1 ]]; then
-        echo "→ Claude profile: $profile (trusted)"
+        echo -e "\033[0;31m⚠ TRUSTED MODE - All permissions auto-accepted\033[0m"
+        echo "→ Claude profile: $profile"
         CLAUDE_CONFIG_DIR="$config_dir" command claude --dangerously-skip-permissions "${claude_args[@]}"
     else
         echo "→ Claude profile: $profile"

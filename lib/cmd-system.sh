@@ -16,18 +16,37 @@ cmd_trust() {
         return 0
     fi
 
-    echo -e "${_YELLOW}Warning: Trusting a profile skips ALL permission prompts.${_NC}"
-    echo "Claude will be able to run any command without asking."
     echo ""
-    read -p "Trust profile '$profile_name'? [y/N] " -r
-    if [[ ! "$REPLY" =~ ^[Yy]$ ]]; then
+    echo -e "${_RED}╔════════════════════════════════════════╗${_NC}"
+    echo -e "${_RED}║             TRUST WARNING              ║${_NC}"
+    echo -e "${_RED}╚════════════════════════════════════════╝${_NC}"
+    echo ""
+    echo -e "${_YELLOW}Trusting a profile uses --dangerously-skip-permissions${_NC}"
+    echo ""
+    echo -e "${_RED}RISKS:${_NC}"
+    echo -e "  ${_RED}•${_NC} Claude can delete ANY file (including system files)"
+    echo -e "  ${_RED}•${_NC} Claude can run ANY command without asking"
+    echo -e "  ${_RED}•${_NC} Claude can modify ~/.bashrc, /etc/*, etc."
+    echo -e "  ${_RED}•${_NC} No confirmation before destructive actions"
+    echo ""
+    echo "RECOMMENDED:"
+    echo "  • Only trust profiles for isolated/sandboxed projects"
+    echo "  • Use --yolo for one-time trust instead"
+    echo "  • Never trust on production systems"
+    echo ""
+    echo -e "${_RED}Type 'I UNDERSTAND THE RISKS' to continue:${_NC}"
+    read -r
+    if [[ "$REPLY" != "I UNDERSTAND THE RISKS" ]]; then
         echo "Cancelled"
         return 0
     fi
 
     touch "$config_dir/.trusted"
+    echo ""
     echo "✓ Profile '$profile_name' is now trusted"
     echo "  All sessions will skip permission prompts"
+    echo ""
+    echo "To undo: claude-profiles untrust $profile_name"
 }
 
 cmd_untrust() {
