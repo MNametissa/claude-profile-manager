@@ -20,6 +20,7 @@ source "$CLAUDE_PM_DIR/lib/cmd-help.sh"
 source "$CLAUDE_PM_DIR/lib/cmd-share.sh"
 source "$CLAUDE_PM_DIR/lib/cmd-permissions.sh"
 source "$CLAUDE_PM_DIR/lib/cmd-system.sh"
+source "$CLAUDE_PM_DIR/lib/cmd-link.sh"
 source "$CLAUDE_PM_DIR/lib/completions.sh"
 
 # Main dispatcher
@@ -64,6 +65,24 @@ claude-profiles() {
         # Trust
         trust)            cmd_trust "$@" ;;
         untrust)          cmd_untrust "$@" ;;
+        # Linking/Sharing resources
+        link-instructions)   cmd_link_instructions "$@" ;;
+        unlink-instructions) cmd_unlink_instructions "$@" ;;
+        sync-instructions)   cmd_sync_instructions "$@" ;;
+        link-projects)       cmd_link_projects "$@" ;;
+        unlink-projects)     cmd_unlink_projects "$@" ;;
+        link-history)        cmd_link_history "$@" ;;
+        unlink-history)      cmd_unlink_history "$@" ;;
+        merge-history)       cmd_merge_history "$@" ;;
+        link-todos)          cmd_link_todos "$@" ;;
+        unlink-todos)        cmd_unlink_todos "$@" ;;
+        link-permissions)    cmd_link_permissions "$@" ;;
+        unlink-permissions)  cmd_unlink_permissions "$@" ;;
+        sync-settings)       cmd_sync_settings "$@" ;;
+        link-all)            cmd_link_all "$@" ;;
+        unlink-all)          cmd_unlink_all "$@" ;;
+        link-status)         cmd_link_status "$@" ;;
+        clone)               cmd_clone "$@" ;;
         # System
         path|where)       cmd_path "$@" ;;
         self-uninstall)   cmd_self_uninstall "$@" ;;
