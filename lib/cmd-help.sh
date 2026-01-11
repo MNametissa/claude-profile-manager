@@ -28,13 +28,17 @@ COMMANDS:
 AGENTS & SKILLS:
     agents [profile]            List agents in profile
     skills [profile]            List skills in profile
+    examples                    List available examples
     show <type> <name> [prof]   Show agent/skill content
+    install <type> <name> [target]  Install from examples
+    uninstall <type> <name> [prof]  Remove from profile
     globalize <type> <name>     Make agent/skill global
     localize <type> <name>      Make global agent/skill local
     share <type> <name> <prof>  Share global with profile
     unshare <type> <name> <prof> Remove shared from profile
 
     <type> = agent | skill
+    [target] = profile name | --global
 
 EXAMPLES:
     claude -u work              Start claude with 'work' profile
@@ -45,8 +49,10 @@ EXAMPLES:
     claude-profiles list        Show all profiles
     claude-profiles info work   Show 'work' profile details
 
-    claude-profiles globalize agent reviewer
-    claude-profiles share agent reviewer work
+    claude-profiles examples
+    claude-profiles install agent dev-rules work
+    claude-profiles install agent dev-rules --global
+    claude-profiles share agent dev-rules neo
 
 ENVIRONMENT:
     CLAUDE_DEFAULT_PROFILE      Set default profile (default: personal)

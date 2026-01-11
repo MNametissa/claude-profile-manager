@@ -2,6 +2,139 @@
 
 GLOBAL_AGENTS_DIR="$HOME/.claude-shared/agents"
 GLOBAL_SKILLS_DIR="$HOME/.claude-shared/skills"
+EXAMPLES_DIR="$CLAUDE_PM_DIR/examples"
+
+# Install agent/skill from examples to a profile or globally
+cmd_install() {
+    local type="$1"
+    local name="$2"
+    local target="${3:-$CLAUDE_DEFAULT_PROFILE}"
+
+    if [[ -z "$type" || -z "$name" ]]; then
+        echo "Usage: claude-profiles install <agent|skill> <name> [profile|--global]" >&2
+        echo ""
+        echo "Available examples:"
+        _list_examples
+        return 1
+    fi
+
+    local source_file target_dir target_label
+    local is_global=0
+
+    if [[ "$target" == "--global" || "$target" == "-g" ]]; then
+        is_global=1
+        target_label="global"
+        case "$type" in
+            agent|agents) target_dir="$GLOBAL_AGENTS_DIR" ;;
+            skill|skills) target_dir="$GLOBAL_SKILLS_DIR" ;;
+            *)
+                echo "Type must be 'agent' or 'skill'" >&2
+                return 1
+                ;;
+        esac
+    else
+        local config_dir="$(profile_dir "$target")"
+        require_profile "$target" || return 1
+        target_label="profile '$target'"
+        case "$type" in
+            agent|agents) target_dir="$config_dir/agents" ;;
+            skill|skills) target_dir="$config_dir/skills" ;;
+            *)
+                echo "Type must be 'agent' or 'skill'" >&2
+                return 1
+                ;;
+        esac
+    fi
+
+    case "$type" in
+        agent|agents) source_file="$EXAMPLES_DIR/agents/$name.md" ;;
+        skill|skills) source_file="$EXAMPLES_DIR/skills/$name.md" ;;
+    esac
+
+    if [[ ! -f "$source_file" ]]; then
+        echo "$type '$name' not found in examples" >&2
+        echo ""
+        echo "Available examples:"
+        _list_examples
+        return 1
+    fi
+
+    local target_file="$target_dir/$name.md"
+    if [[ -e "$target_file" ]]; then
+        echo "$type '$name' already exists in $target_label" >&2
+        return 1
+    fi
+
+    mkdir -p "$target_dir"
+    cp "$source_file" "$target_file"
+
+    echo "✓ Installed $type '$name' to $target_label"
+}
+
+# Uninstall agent/skill from a profile
+cmd_uninstall() {
+    local type="$1"
+    local name="$2"
+    local profile_name="${3:-$CLAUDE_DEFAULT_PROFILE}"
+
+    if [[ -z "$type" || -z "$name" ]]; then
+        echo "Usage: claude-profiles uninstall <agent|skill> <name> [profile]" >&2
+        return 1
+    fi
+
+    local config_dir="$(profile_dir "$profile_name")"
+    require_profile "$profile_name" || return 1
+
+    local target_dir
+    case "$type" in
+        agent|agents) target_dir="$config_dir/agents" ;;
+        skill|skills) target_dir="$config_dir/skills" ;;
+        *)
+            echo "Type must be 'agent' or 'skill'" >&2
+            return 1
+            ;;
+    esac
+
+    local target_file="$target_dir/$name.md"
+
+    if [[ ! -e "$target_file" ]]; then
+        echo "$type '$name' not found in profile '$profile_name'" >&2
+        return 1
+    fi
+
+    rm -f "$target_file"
+    echo "✓ Uninstalled $type '$name' from profile '$profile_name'"
+}
+
+# List available examples
+cmd_examples() {
+    echo "Available examples:"
+    echo ""
+    _list_examples
+}
+
+_list_examples() {
+    echo "Agents:"
+    if [[ -d "$EXAMPLES_DIR/agents" ]]; then
+        for f in "$EXAMPLES_DIR/agents"/*.md; do
+            [[ -f "$f" ]] || continue
+            echo "  ● $(basename "$f" .md)"
+        done
+    else
+        echo "  (none)"
+    fi
+
+    echo ""
+    echo "Skills:"
+    if [[ -d "$EXAMPLES_DIR/skills" ]]; then
+        for f in "$EXAMPLES_DIR/skills"/*.md; do
+            [[ -f "$f" ]] || continue
+            echo "  ● $(basename "$f" .md)"
+        done
+    else
+        echo "  (none)"
+    fi
+}
 
 # Show agent/skill content
 cmd_show() {

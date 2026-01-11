@@ -40,7 +40,10 @@ claude-profiles() {
         path|where)     cmd_path "$@" ;;
         agents)         cmd_agents "$@" ;;
         skills)         cmd_skills "$@" ;;
+        examples)       cmd_examples "$@" ;;
         show)           cmd_show "$@" ;;
+        install)        cmd_install "$@" ;;
+        uninstall)      cmd_uninstall "$@" ;;
         globalize)      cmd_globalize "$@" ;;
         localize)       cmd_localize "$@" ;;
         share)          cmd_share "$@" ;;
