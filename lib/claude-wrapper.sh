@@ -1,6 +1,13 @@
 # Main claude wrapper function
 
 claude() {
+    # Pass through native Claude commands (install, update, help, etc.)
+    # Only intercept interactive usage
+    if [[ "$1" == "install" || "$1" == "update" || "$1" == "doctor" || "$1" == "--help" || "$1" == "-h" || "$1" == "--version" || "$1" == "-v" ]]; then
+        command claude "$@"
+        return $?
+    fi
+
     local profile="$CLAUDE_DEFAULT_PROFILE"
     local claude_args=()
     local yolo_mode=false
