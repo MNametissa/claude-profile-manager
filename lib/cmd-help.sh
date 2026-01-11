@@ -1,16 +1,14 @@
-# Help command
+# Help commands
 
 cmd_help() {
     cat << 'EOF'
 Claude Profile Manager
 
-USAGE:
-    claude -u <profile> [claude-args...]     Run claude with specific profile
-    claude [claude-args...]                  Run claude with default profile
+USAGE
+    claude -u <profile> [args...]       Run claude with specific profile
+    claude-profiles <command> [args...] Manage profiles
 
-    claude-profiles <command> [args...]      Manage profiles
-
-COMMANDS:
+PROFILES
     list, ls                    List all profiles
     add <name>                  Create new profile
     remove <name>               Remove profile
@@ -18,43 +16,82 @@ COMMANDS:
     info [name]                 Show profile details
     usage [name]                Show disk usage breakdown
     diff <p1> <p2>              Compare two profiles
+    current                     Show active profile
+    default [name]              Get/set default profile
+
+IMPORT/EXPORT
     export <name> [file]        Export profile to zip
     import <file> [name]        Import profile from zip
-    current                     Show current active profile
-    default [name]              Get/set default profile
-    path                        Show installation path
-    help                        Show this help
 
-AGENTS & SKILLS:
+AGENTS & SKILLS
     agents [profile]            List agents in profile
     skills [profile]            List skills in profile
-    examples                    List available examples
-    show <type> <name> [prof]   Show agent/skill content
-    install <type> <name> [target]  Install from examples
-    uninstall <type> <name> [prof]  Remove from profile
-    globalize <type> <name>     Make agent/skill global
-    localize <type> <name>      Make global agent/skill local
-    share <type> <name> <prof>  Share global with profile
-    unshare <type> <name> <prof> Remove shared from profile
+    examples                    List bundled examples
+    show <type> <name>          Show agent/skill content
+    install <type> <name> [target]
+    uninstall <type> <name> [profile]
+    globalize <type> <name>     Move to global, symlink back
+    localize <type> <name>      Copy global back to local
+    share <type> <name> <prof>  Link global to profile
+    unshare <type> <name> <prof>
 
-    <type> = agent | skill
-    [target] = profile name | --global
+    <type>   = agent | skill
+    [target] = profile | --global
 
-EXAMPLES:
-    claude -u work              Start claude with 'work' profile
-    claude -u team1             Start claude with 'team1' profile
-    claude                      Start claude with default profile
+SYSTEM
+    path                        Show installation path
+    self-uninstall              Remove profile manager
+    help                        This help
+    help extended               Detailed help
 
-    claude-profiles add work    Create 'work' profile
-    claude-profiles list        Show all profiles
-    claude-profiles info work   Show 'work' profile details
+Run 'claude-profiles help extended' for more details.
+EOF
+}
 
-    claude-profiles examples
-    claude-profiles install agent dev-rules work
-    claude-profiles install agent dev-rules --global
-    claude-profiles share agent dev-rules neo
+cmd_help_extended() {
+    cat << 'EOF'
+Claude Profile Manager - Extended Help
 
-ENVIRONMENT:
-    CLAUDE_DEFAULT_PROFILE      Set default profile (default: personal)
+STANDALONE USAGE (without profile manager)
+    Exported profiles work without the profile manager.
+    Just extract and use CLAUDE_CONFIG_DIR:
+
+    unzip claude-profile-work.zip -d ~
+    CLAUDE_CONFIG_DIR=~/.claude-work claude
+
+    Or for a whole session:
+    export CLAUDE_CONFIG_DIR=~/.claude-work
+    claude
+
+EXPORT/IMPORT DETAILS
+    Export creates a zip of ~/.claude-<name>/ excluding:
+    - .credentials.json (security)
+    - statsig/ (telemetry cache)
+
+    After importing, run 'claude -u <name>' to authenticate.
+
+AGENTS & SKILLS WORKFLOW
+    1. See available:     claude-profiles examples
+    2. Install to profile: claude-profiles install agent dev-rules work
+       Or globally:        claude-profiles install agent dev-rules --global
+    3. Share global:       claude-profiles share agent dev-rules neo
+    4. Use in claude:      claude --agent dev-rules
+
+PROFILE LOCATIONS
+    Profiles:       ~/.claude-<name>/
+    Global shared:  ~/.claude-shared/agents/
+                    ~/.claude-shared/skills/
+    Manager:        ~/.local/share/claude-profile-manager/
+
+UNINSTALLING
+    claude-profiles self-uninstall
+
+    This removes:
+    - Source line from ~/.bashrc or ~/.zshrc
+    - ~/.local/share/claude-profile-manager/
+
+    It does NOT remove:
+    - Your profiles (~/.claude-*)
+    - Global agents/skills (~/.claude-shared/)
 EOF
 }

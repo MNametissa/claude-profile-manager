@@ -18,6 +18,7 @@ source "$CLAUDE_PM_DIR/lib/cmd-transfer.sh"
 source "$CLAUDE_PM_DIR/lib/cmd-default.sh"
 source "$CLAUDE_PM_DIR/lib/cmd-help.sh"
 source "$CLAUDE_PM_DIR/lib/cmd-share.sh"
+source "$CLAUDE_PM_DIR/lib/cmd-system.sh"
 source "$CLAUDE_PM_DIR/lib/completions.sh"
 
 # Main dispatcher
@@ -26,29 +27,40 @@ claude-profiles() {
     shift 2>/dev/null || true
 
     case "$cmd" in
-        list|ls)        cmd_list "$@" ;;
-        add|create)     cmd_add "$@" ;;
+        # Profiles
+        list|ls)          cmd_list "$@" ;;
+        add|create)       cmd_add "$@" ;;
         remove|rm|delete) cmd_remove "$@" ;;
-        rename|mv)      cmd_rename "$@" ;;
-        info)           cmd_info "$@" ;;
-        usage)          cmd_usage "$@" ;;
-        diff)           cmd_diff "$@" ;;
-        export)         cmd_export "$@" ;;
-        import)         cmd_import "$@" ;;
-        current)        cmd_current "$@" ;;
-        default)        cmd_default "$@" ;;
-        path|where)     cmd_path "$@" ;;
-        agents)         cmd_agents "$@" ;;
-        skills)         cmd_skills "$@" ;;
-        examples)       cmd_examples "$@" ;;
-        show)           cmd_show "$@" ;;
-        install)        cmd_install "$@" ;;
-        uninstall)      cmd_uninstall "$@" ;;
-        globalize)      cmd_globalize "$@" ;;
-        localize)       cmd_localize "$@" ;;
-        share)          cmd_share "$@" ;;
-        unshare)        cmd_unshare "$@" ;;
-        help|--help|-h) cmd_help "$@" ;;
+        rename|mv)        cmd_rename "$@" ;;
+        info)             cmd_info "$@" ;;
+        usage)            cmd_usage "$@" ;;
+        diff)             cmd_diff "$@" ;;
+        current)          cmd_current "$@" ;;
+        default)          cmd_default "$@" ;;
+        # Import/Export
+        export)           cmd_export "$@" ;;
+        import)           cmd_import "$@" ;;
+        # Agents & Skills
+        agents)           cmd_agents "$@" ;;
+        skills)           cmd_skills "$@" ;;
+        examples)         cmd_examples "$@" ;;
+        show)             cmd_show "$@" ;;
+        install)          cmd_install "$@" ;;
+        uninstall)        cmd_uninstall "$@" ;;
+        globalize)        cmd_globalize "$@" ;;
+        localize)         cmd_localize "$@" ;;
+        share)            cmd_share "$@" ;;
+        unshare)          cmd_unshare "$@" ;;
+        # System
+        path|where)       cmd_path "$@" ;;
+        self-uninstall)   cmd_self_uninstall "$@" ;;
+        help|--help|-h)
+            if [[ "$1" == "extended" ]]; then
+                cmd_help_extended
+            else
+                cmd_help "$@"
+            fi
+            ;;
         *)
             echo "Unknown command: $cmd" >&2
             echo "Run 'claude-profiles help' for usage" >&2

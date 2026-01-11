@@ -36,6 +36,10 @@ cmd_export() {
 
     echo "✓ Exported '$profile_name' to $output_file"
     echo "  (credentials excluded)"
+    echo ""
+    echo "Standalone usage (without profile manager):"
+    echo "  unzip $output_file -d ~"
+    echo "  CLAUDE_CONFIG_DIR=~/.claude-$profile_name claude"
 }
 
 cmd_import() {
