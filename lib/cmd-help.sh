@@ -38,6 +38,12 @@ AGENTS & SKILLS
     <type>   = agent | skill
     [target] = profile | --global
 
+TRUST (skip permission prompts)
+    trust [profile]             Trust profile (skip all prompts)
+    untrust [profile]           Untrust profile (restore prompts)
+
+    Or one-time: claude -u work --yolo
+
 SYSTEM
     path                        Show installation path
     self-uninstall              Remove profile manager

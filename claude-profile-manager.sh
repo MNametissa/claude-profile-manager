@@ -53,6 +53,8 @@ claude-profiles() {
         unshare)          cmd_unshare "$@" ;;
         # System
         path|where)       cmd_path "$@" ;;
+        trust)            cmd_trust "$@" ;;
+        untrust)          cmd_untrust "$@" ;;
         self-uninstall)   cmd_self_uninstall "$@" ;;
         help|--help|-h)
             if [[ "$1" == "extended" ]]; then

@@ -5,6 +5,47 @@ _RED='\033[0;31m'
 _YELLOW='\033[0;33m'
 _NC='\033[0m' # No Color
 
+cmd_trust() {
+    local profile_name="${1:-$CLAUDE_DEFAULT_PROFILE}"
+    local config_dir="$(profile_dir "$profile_name")"
+
+    require_profile "$profile_name" || return 1
+
+    if [[ -f "$config_dir/.trusted" ]]; then
+        echo "Profile '$profile_name' is already trusted"
+        return 0
+    fi
+
+    echo -e "${_YELLOW}Warning: Trusting a profile skips ALL permission prompts.${_NC}"
+    echo "Claude will be able to run any command without asking."
+    echo ""
+    read -p "Trust profile '$profile_name'? [y/N] " -r
+    if [[ ! "$REPLY" =~ ^[Yy]$ ]]; then
+        echo "Cancelled"
+        return 0
+    fi
+
+    touch "$config_dir/.trusted"
+    echo "✓ Profile '$profile_name' is now trusted"
+    echo "  All sessions will skip permission prompts"
+}
+
+cmd_untrust() {
+    local profile_name="${1:-$CLAUDE_DEFAULT_PROFILE}"
+    local config_dir="$(profile_dir "$profile_name")"
+
+    require_profile "$profile_name" || return 1
+
+    if [[ ! -f "$config_dir/.trusted" ]]; then
+        echo "Profile '$profile_name' is not trusted"
+        return 0
+    fi
+
+    rm -f "$config_dir/.trusted"
+    echo "✓ Profile '$profile_name' is no longer trusted"
+    echo "  Permission prompts are now enabled"
+}
+
 cmd_self_uninstall() {
     echo ""
     echo -e "${_RED}╔════════════════════════════════════════╗${_NC}"

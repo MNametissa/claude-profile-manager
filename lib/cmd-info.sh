@@ -22,6 +22,12 @@ cmd_info() {
     else
         echo "Status: ○ Not authenticated"
     fi
+
+    if [[ -f "$config_dir/.trusted" ]]; then
+        echo "Trust: ⚠ TRUSTED (skips permission prompts)"
+    else
+        echo "Trust: Normal (prompts enabled)"
+    fi
     echo ""
 
     echo "Context files:"
