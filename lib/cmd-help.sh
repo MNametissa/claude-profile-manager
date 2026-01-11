@@ -25,6 +25,16 @@ COMMANDS:
     path                        Show installation path
     help                        Show this help
 
+AGENTS & SKILLS:
+    agents [profile]            List agents in profile
+    skills [profile]            List skills in profile
+    globalize <type> <name>     Make agent/skill global
+    localize <type> <name>      Make global agent/skill local
+    share <type> <name> <prof>  Share global with profile
+    unshare <type> <name> <prof> Remove shared from profile
+
+    <type> = agent | skill
+
 EXAMPLES:
     claude -u work              Start claude with 'work' profile
     claude -u team1             Start claude with 'team1' profile
@@ -32,8 +42,10 @@ EXAMPLES:
 
     claude-profiles add work    Create 'work' profile
     claude-profiles list        Show all profiles
-    claude-profiles current     Show which profile is active
     claude-profiles info work   Show 'work' profile details
+
+    claude-profiles globalize agent reviewer
+    claude-profiles share agent reviewer work
 
 ENVIRONMENT:
     CLAUDE_DEFAULT_PROFILE      Set default profile (default: personal)

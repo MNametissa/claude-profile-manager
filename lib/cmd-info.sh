@@ -59,6 +59,38 @@ cmd_info() {
         echo ""
     fi
 
+    # Show agents
+    echo "Agents:"
+    local found_agents=0
+    if [[ -d "$config_dir/agents" ]]; then
+        for agent in "$config_dir/agents"/*.md; do
+            [[ -f "$agent" ]] || continue
+            local name=$(basename "$agent" .md)
+            local is_link=""
+            [[ -L "$agent" ]] && is_link=" (shared)"
+            echo "  ● $name$is_link"
+            found_agents=1
+        done
+    fi
+    [[ $found_agents -eq 0 ]] && echo "  (none)"
+    echo ""
+
+    # Show skills
+    echo "Skills:"
+    local found_skills=0
+    if [[ -d "$config_dir/skills" ]]; then
+        for skill in "$config_dir/skills"/*.md; do
+            [[ -f "$skill" ]] || continue
+            local name=$(basename "$skill" .md)
+            local is_link=""
+            [[ -L "$skill" ]] && is_link=" (shared)"
+            echo "  ● $name$is_link"
+            found_skills=1
+        done
+    fi
+    [[ $found_skills -eq 0 ]] && echo "  (none)"
+    echo ""
+
     if command -v du &> /dev/null; then
         local size=$(du -sh "$config_dir" 2>/dev/null | cut -f1)
         echo "Disk usage: $size"

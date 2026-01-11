@@ -17,6 +17,7 @@ source "$CLAUDE_PM_DIR/lib/cmd-info.sh"
 source "$CLAUDE_PM_DIR/lib/cmd-transfer.sh"
 source "$CLAUDE_PM_DIR/lib/cmd-default.sh"
 source "$CLAUDE_PM_DIR/lib/cmd-help.sh"
+source "$CLAUDE_PM_DIR/lib/cmd-share.sh"
 source "$CLAUDE_PM_DIR/lib/completions.sh"
 
 # Main dispatcher
@@ -37,6 +38,12 @@ claude-profiles() {
         current)        cmd_current "$@" ;;
         default)        cmd_default "$@" ;;
         path|where)     cmd_path "$@" ;;
+        agents)         cmd_agents "$@" ;;
+        skills)         cmd_skills "$@" ;;
+        globalize)      cmd_globalize "$@" ;;
+        localize)       cmd_localize "$@" ;;
+        share)          cmd_share "$@" ;;
+        unshare)        cmd_unshare "$@" ;;
         help|--help|-h) cmd_help "$@" ;;
         *)
             echo "Unknown command: $cmd" >&2
