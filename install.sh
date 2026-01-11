@@ -62,10 +62,14 @@ fi
 # Install scripts to ~/.local/share
 echo "Installing scripts to $INSTALL_DIR..."
 mkdir -p "$INSTALL_DIR/lib"
+mkdir -p "$INSTALL_DIR/examples/agents"
+mkdir -p "$INSTALL_DIR/examples/skills"
 cp "$PROFILE_MANAGER" "$INSTALL_SCRIPT"
 [[ -f "$SCRIPT_DIR/install.sh" ]] && cp "$SCRIPT_DIR/install.sh" "$INSTALL_DIR/install.sh"
 [[ -f "$SCRIPT_DIR/clean.sh" ]] && cp "$SCRIPT_DIR/clean.sh" "$INSTALL_DIR/clean.sh"
 [[ -d "$SCRIPT_DIR/lib" ]] && cp "$SCRIPT_DIR/lib/"*.sh "$INSTALL_DIR/lib/"
+[[ -d "$SCRIPT_DIR/examples/agents" ]] && cp "$SCRIPT_DIR/examples/agents/"*.md "$INSTALL_DIR/examples/agents/" 2>/dev/null || true
+[[ -d "$SCRIPT_DIR/examples/skills" ]] && cp "$SCRIPT_DIR/examples/skills/"*.md "$INSTALL_DIR/examples/skills/" 2>/dev/null || true
 chmod +x "$INSTALL_DIR"/*.sh 2>/dev/null || true
 
 echo ""
