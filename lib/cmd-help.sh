@@ -28,6 +28,7 @@ COMMANDS:
 AGENTS & SKILLS:
     agents [profile]            List agents in profile
     skills [profile]            List skills in profile
+    show <type> <name> [prof]   Show agent/skill content
     globalize <type> <name>     Make agent/skill global
     localize <type> <name>      Make global agent/skill local
     share <type> <name> <prof>  Share global with profile

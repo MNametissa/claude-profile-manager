@@ -3,6 +3,52 @@
 GLOBAL_AGENTS_DIR="$HOME/.claude-shared/agents"
 GLOBAL_SKILLS_DIR="$HOME/.claude-shared/skills"
 
+# Show agent/skill content
+cmd_show() {
+    local type="$1"
+    local name="$2"
+    local profile_name="${3:-$CLAUDE_DEFAULT_PROFILE}"
+
+    if [[ -z "$type" || -z "$name" ]]; then
+        echo "Usage: claude-profiles show <agent|skill> <name> [profile]" >&2
+        return 1
+    fi
+
+    local config_dir="$(profile_dir "$profile_name")"
+    local file=""
+
+    case "$type" in
+        agent|agents)
+            if [[ -f "$config_dir/agents/$name.md" ]]; then
+                file="$config_dir/agents/$name.md"
+            elif [[ -f "$GLOBAL_AGENTS_DIR/$name.md" ]]; then
+                file="$GLOBAL_AGENTS_DIR/$name.md"
+            fi
+            ;;
+        skill|skills)
+            if [[ -f "$config_dir/skills/$name.md" ]]; then
+                file="$config_dir/skills/$name.md"
+            elif [[ -f "$GLOBAL_SKILLS_DIR/$name.md" ]]; then
+                file="$GLOBAL_SKILLS_DIR/$name.md"
+            fi
+            ;;
+        *)
+            echo "Type must be 'agent' or 'skill'" >&2
+            return 1
+            ;;
+    esac
+
+    if [[ -z "$file" || ! -f "$file" ]]; then
+        echo "$type '$name' not found" >&2
+        return 1
+    fi
+
+    echo "=== $name ($type) ==="
+    [[ -L "$file" ]] && echo "Location: $(readlink -f "$file")" || echo "Location: $file"
+    echo ""
+    cat "$file"
+}
+
 # List agents or skills
 cmd_agents() {
     local profile_name="${1:-$CLAUDE_DEFAULT_PROFILE}"
