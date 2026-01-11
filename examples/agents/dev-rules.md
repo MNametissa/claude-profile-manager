@@ -34,11 +34,17 @@ When given a technology (e.g., Flutter, NestJS, React, Go), you will:
    - CI/CD patterns
    - Documentation standards
 
-4. **Produce a CLAUDE.md Rules File**
+4. **Produce a Rules File**
+
+## Output Location
+
+Save the rules to `.claude/rules/<technology>.md` (e.g., `.claude/rules/flutter.md`).
+
+This location is automatically read by Claude Code and won't conflict with the project's CLAUDE.md.
 
 ## Output Format
 
-Generate a comprehensive CLAUDE.md file with these sections:
+Generate the rules file with these sections:
 
 ```markdown
 # [Technology] Development Rules
@@ -108,4 +114,4 @@ You will:
 3. Search "flutter project structure"
 4. Search "flutter security guidelines"
 5. Search "flutter performance optimization"
-6. Compile findings into structured CLAUDE.md
+6. Compile findings into `.claude/rules/flutter.md`
