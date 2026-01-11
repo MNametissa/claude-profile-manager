@@ -18,6 +18,7 @@ source "$CLAUDE_PM_DIR/lib/cmd-transfer.sh"
 source "$CLAUDE_PM_DIR/lib/cmd-default.sh"
 source "$CLAUDE_PM_DIR/lib/cmd-help.sh"
 source "$CLAUDE_PM_DIR/lib/cmd-share.sh"
+source "$CLAUDE_PM_DIR/lib/cmd-permissions.sh"
 source "$CLAUDE_PM_DIR/lib/cmd-system.sh"
 source "$CLAUDE_PM_DIR/lib/completions.sh"
 
@@ -51,10 +52,20 @@ claude-profiles() {
         localize)         cmd_localize "$@" ;;
         share)            cmd_share "$@" ;;
         unshare)          cmd_unshare "$@" ;;
-        # System
-        path|where)       cmd_path "$@" ;;
+        # Permissions
+        permissions|perms) cmd_permissions "$@" ;;
+        permissions-init)  cmd_permissions_init "$@" ;;
+        permissions-preset|preset) cmd_permissions_preset "$@" ;;
+        allow)            cmd_allow "$@" ;;
+        deny)             cmd_deny "$@" ;;
+        ask)              cmd_ask "$@" ;;
+        unallow)          cmd_unallow "$@" ;;
+        undeny)           cmd_undeny "$@" ;;
+        # Trust
         trust)            cmd_trust "$@" ;;
         untrust)          cmd_untrust "$@" ;;
+        # System
+        path|where)       cmd_path "$@" ;;
         self-uninstall)   cmd_self_uninstall "$@" ;;
         help|--help|-h)
             if [[ "$1" == "extended" ]]; then

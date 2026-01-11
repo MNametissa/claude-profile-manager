@@ -3,7 +3,7 @@
 claude() {
     local profile="$CLAUDE_DEFAULT_PROFILE"
     local claude_args=()
-    local skip_permissions=0
+    local yolo_mode=false
 
     while [[ $# -gt 0 ]]; do
         case $1 in
@@ -16,8 +16,8 @@ claude() {
                     return 1
                 fi
                 ;;
-            --yolo|--trust)
-                skip_permissions=1
+            --yolo)
+                yolo_mode=true
                 shift
                 ;;
             *)
@@ -38,19 +38,19 @@ claude() {
         return 1
     fi
 
-    # Check if profile is trusted
-    if [[ -f "$config_dir/.trusted" ]]; then
-        skip_permissions=1
+    echo "→ Claude profile: $profile"
+
+    # YOLO mode: skip all permissions for this session only
+    if [[ "$yolo_mode" == true ]]; then
+        echo "⚠ YOLO mode: skipping all permissions for this session"
+        claude_args=("--dangerously-skip-permissions" "${claude_args[@]}")
+    # Trusted profile: skip permissions permanently
+    elif [[ -f "$config_dir/.trusted" ]]; then
+        echo "⚠ Trusted profile: skipping all permissions"
+        claude_args=("--dangerously-skip-permissions" "${claude_args[@]}")
     fi
 
-    if [[ $skip_permissions -eq 1 ]]; then
-        echo -e "\033[0;31m⚠ TRUSTED MODE - All permissions auto-accepted\033[0m"
-        echo "→ Claude profile: $profile"
-        CLAUDE_CONFIG_DIR="$config_dir" command claude --dangerously-skip-permissions "${claude_args[@]}"
-    else
-        echo "→ Claude profile: $profile"
-        CLAUDE_CONFIG_DIR="$config_dir" command claude "${claude_args[@]}"
-    fi
+    CLAUDE_CONFIG_DIR="$config_dir" command claude "${claude_args[@]}"
 }
 
 export -f claude
