@@ -209,6 +209,7 @@ cmd_merge_history() {
         # Sort by timestamp if jq available
         if command -v jq &> /dev/null; then
             local tmp=$(mktemp)
+            trap 'rm -f "$tmp"' RETURN
             sort -u "$hist2" > "$tmp" && mv "$tmp" "$hist2"
         fi
     fi

@@ -28,9 +28,10 @@ cmd_export() {
     [[ -z "$output_file" ]] && output_file="claude-profile-$profile_name-$(date +%Y%m%d).zip"
 
     local config_dir="$(profile_dir "$profile_name")"
+    local orig_dir="$(pwd)"
 
     # Create zip excluding credentials
-    (cd "$CLAUDE_PROFILES_DIR" && zip -rq "$OLDPWD/$output_file" ".claude-$profile_name" \
+    (cd "$CLAUDE_PROFILES_DIR" && zip -rq "$orig_dir/$output_file" ".claude-$profile_name" \
         -x ".claude-$profile_name/.credentials.json" \
         -x ".claude-$profile_name/statsig/*") 2>/dev/null
 

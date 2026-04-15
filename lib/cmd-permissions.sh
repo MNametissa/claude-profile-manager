@@ -114,6 +114,7 @@ cmd_permissions_init() {
         # Ensure permissions object exists
         if command -v jq &> /dev/null; then
             local tmp=$(mktemp)
+            trap 'rm -f "$tmp"' RETURN
             jq '. + {permissions: (.permissions // {allow: [], deny: [], ask: []})}' "$settings_file" > "$tmp" && mv "$tmp" "$settings_file"
         fi
     else
@@ -273,6 +274,7 @@ _add_permission() {
     fi
 
     local tmp=$(mktemp)
+    trap 'rm -f "$tmp"' RETURN
     jq --arg rule "$rule" ".permissions.$list += [\$rule] | .permissions.$list |= unique" "$settings_file" > "$tmp" && mv "$tmp" "$settings_file"
 
     echo "✓ Added to $list: $rule"
@@ -295,6 +297,7 @@ _remove_permission() {
     fi
 
     local tmp=$(mktemp)
+    trap 'rm -f "$tmp"' RETURN
     jq --arg rule "$rule" ".permissions.$list -= [\$rule]" "$settings_file" > "$tmp" && mv "$tmp" "$settings_file"
 
     echo "✓ Removed from $list: $rule"
@@ -311,5 +314,6 @@ _set_permissions() {
     fi
 
     local tmp=$(mktemp)
+    trap 'rm -f "$tmp"' RETURN
     jq --argjson perms "$permissions_json" '.permissions = $perms' "$settings_file" > "$tmp" && mv "$tmp" "$settings_file"
 }

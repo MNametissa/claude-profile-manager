@@ -29,7 +29,11 @@ fi
 lines_before=$(wc -l < "$SHELL_RC")
 
 # Remove old embedded installation
-sed -i '/# Claude Profile Manager - START/,/# Claude Profile Manager - END/d' "$SHELL_RC"
+if [[ "$OSTYPE" == "darwin"* ]]; then
+    sed -i '' '/# Claude Profile Manager - START/,/# Claude Profile Manager - END/d' "$SHELL_RC"
+else
+    sed -i '/# Claude Profile Manager - START/,/# Claude Profile Manager - END/d' "$SHELL_RC"
+fi
 
 # Count lines after
 lines_after=$(wc -l < "$SHELL_RC")

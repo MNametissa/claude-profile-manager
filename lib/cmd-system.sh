@@ -59,8 +59,13 @@ cmd_self_uninstall() {
 
     # Remove source line
     if grep -q "claude-profile-manager" "$shell_rc" 2>/dev/null; then
-        sed -i '/# Claude Profile Manager/d' "$shell_rc"
-        sed -i '/claude-profile-manager/d' "$shell_rc"
+        if [[ "$OSTYPE" == "darwin"* ]]; then
+            sed -i '' '/# Claude Profile Manager/d' "$shell_rc"
+            sed -i '' '/claude-profile-manager/d' "$shell_rc"
+        else
+            sed -i '/# Claude Profile Manager/d' "$shell_rc"
+            sed -i '/claude-profile-manager/d' "$shell_rc"
+        fi
         echo "✓ Removed from $shell_rc"
     fi
 
